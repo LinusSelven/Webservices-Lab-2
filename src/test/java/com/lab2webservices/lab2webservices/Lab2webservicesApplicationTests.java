@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.Mockito.any;
@@ -76,5 +75,65 @@ class Lab2webservicesApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":0,\"name\":\"Iphone\"}"))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("Delete user with ID in url")
+    void deleteUserInRepository() throws Exception {
+        mockMvc.perform(delete("/api/v1/phones/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Trying to delete user with invalid ID")
+    void deleteUserWithInvalidID() throws Exception {
+        mockMvc.perform(delete("/api/v1/phones/5"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Put with complete data")
+    void putUserWithCompleteDataWithId1() throws Exception {
+        mockMvc.perform(put("/api/v1/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"id\":0,\"userName\":\"PG\",\"realName\":\"Patrik G\",\"city\":\"Göteborg\",\"income\":25000,\"inRelationship\":true}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/users/1")))
+                .andExpect(jsonPath("userName", is("PG")));
+    }
+
+    @Test
+    @DisplayName("Put with incomplete data, should return null on missing content")
+    void putUserWithIncompleteData() throws Exception {
+        mockMvc.perform(put("/api/v1/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userName\":\"Nisse32\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/users/1")))
+                .andExpect(jsonPath("userName", is("Nisse32")))
+                .andExpect(jsonPath("realName").doesNotExist());
+    }
+
+    @Test
+    @DisplayName("Patch user with new complete data")
+    void patchUserWithAllData() throws Exception {
+        mockMvc.perform(patch("/api/v1/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"id\":0,\"userName\":\"Nisse33\",\"realName\":\"Nils\",\"city\":\"Stockholm\",\"income\":5000,\"inRelationship\":false}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/users/1")))
+                .andExpect(jsonPath("userName", is("Nisse33")));
+    }
+
+    @Test
+    @DisplayName("Patch with only username and expect other values to remain unchanged")
+    void patchUserWithNewUsername() throws Exception {
+        mockMvc.perform(patch("/api/v1/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"userName\":\"Nisse33\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/users/1")))
+                .andExpect(jsonPath("userName", is("Nisse33")))
+                .andExpect(jsonPath("realName", is("Patrik")));
     }
 }

@@ -79,14 +79,14 @@ class PhoneControllerTest {
 
     @Test
     @DisplayName("Delete phone with ID in url")
-    void deleteUserInRepository() throws Exception {
+    void deletePhoneInRepository() throws Exception {
         mockMvc.perform(delete("/api/v1/phones/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("Trying to delete phone with invalid ID")
-    void deleteUserWithInvalidID() throws Exception {
+    void deletePhoneWithInvalidID() throws Exception {
         mockMvc.perform(delete("/api/v1/phones/0"))
                 .andExpect(status().isNotFound());
     }
@@ -129,7 +129,7 @@ class PhoneControllerTest {
 
     @Test
     @DisplayName("Patch with only phone name and expect other values to remain unchanged")
-    void patchUserWithNewUsername() throws Exception {
+    void patchPhoneWithNewUsername() throws Exception {
         mockMvc.perform(patch("/api/v1/phones/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"phoneName\":\"Iphone 6s\"}"))

@@ -92,7 +92,7 @@ public class PhoneController {
     }
 
     @PatchMapping("/{id}")
-    ResponseEntity<EntityModel<Phone>> modifyUser(@RequestBody Phone updatedPhone, @PathVariable Long id){
+    ResponseEntity<EntityModel<Phone>> modifyPhone(@RequestBody Phone updatedPhone, @PathVariable Long id){
         if(repository.findById(id).isPresent()){
             var p = repository.findById(id)
                     .map(newPhone -> {

@@ -72,7 +72,7 @@ class PhoneControllerTest {
         mockMvc.perform(
                 post("/api/v1/phones/")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":0,\"name\":\"Iphone\"}"))
+                        .content("{\"id\":0,\"name\":\"Iphone 6s\"}"))
                 .andExpect(status().isCreated());
     }
 

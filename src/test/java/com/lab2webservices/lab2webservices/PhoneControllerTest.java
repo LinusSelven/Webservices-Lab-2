@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.intThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -92,36 +93,38 @@ class PhoneControllerTest {
 
     @Test
     @DisplayName("Put with complete data")
-    void putUserWithCompleteDataWithId1() throws Exception {
+    void putPhoneWithCompleteDataWithId1() throws Exception {
         mockMvc.perform(put("/api/v1/phones/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\":1,\"phoneName\":\"Iphone X\"}"))
+                .content("{\"id\":1,\"phoneName\":\"Iphone 4s\", \"brandId\":1}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/phones/1")))
-                .andExpect(jsonPath("phoneName", is("Iphone X")));
+                .andExpect(jsonPath("phoneName", is("Iphone 4s")))
+                .andExpect(jsonPath("brandId", is(1)));
     }
 
     @Test
     @DisplayName("Put with incomplete data, should return brand id 0 on missing content")
-    void putUserWithIncompleteData() throws Exception {
+    void putPhoneWithIncompleteData() throws Exception {
         mockMvc.perform(put("/api/v1/phones/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"id\":1,\"phoneName\":\"Iphone X\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/phones/1")))
                 .andExpect(jsonPath("phoneName", is("Iphone X")))
-                .andExpect(jsonPath("realName").doesNotExist());
+                .andExpect(jsonPath("brandId", is(0)));
     }
 
     @Test
     @DisplayName("Patch phone with new complete data")
-    void patchUserWithAllData() throws Exception {
+    void patchPhoneWithAllData() throws Exception {
         mockMvc.perform(patch("/api/v1/phones/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"id\":1,\"phoneName\":\"Iphone 4s\",\"brandId\":\"1\"}"))
+                .content("{\"id\":1,\"phoneName\":\"Iphone 4s\",\"brandId\":1}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/phones/1")))
-                .andExpect(jsonPath("phoneName", is("Iphone 4s")));
+                .andExpect(jsonPath("phoneName", is("Iphone 4s")))
+                .andExpect(jsonPath("brandId", is(1)));
     }
 
     @Test
@@ -132,6 +135,7 @@ class PhoneControllerTest {
                 .content("{\"phoneName\":\"Iphone 6s\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("_links.self.href", is("http://localhost/api/v1/phones/1")))
+                .andExpect(jsonPath("id", is(1)))
                 .andExpect(jsonPath("phoneName", is("Iphone 6s")))
                 .andExpect(jsonPath("brandId", is(1)));
     }

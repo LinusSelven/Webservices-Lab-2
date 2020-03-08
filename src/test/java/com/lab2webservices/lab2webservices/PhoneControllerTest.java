@@ -1,6 +1,5 @@
 package com.lab2webservices.lab2webservices;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,7 +60,7 @@ class PhoneControllerTest {
     }
 
     @Test
-    @DisplayName("Calls Get method with invalid id url /api/v1/phones/3")
+    @DisplayName("Calls Get method with invalid id url /api/v1/phones/0")
     void getOnePhoneWithInValidIdThree() throws Exception {
         mockMvc.perform(
                 get("/api/phones/0").accept(MediaType.APPLICATION_JSON))
@@ -78,16 +77,16 @@ class PhoneControllerTest {
     }
 
     @Test
-    @DisplayName("Delete user with ID in url")
+    @DisplayName("Delete phone with ID in url")
     void deleteUserInRepository() throws Exception {
         mockMvc.perform(delete("/api/v1/phones/1"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @DisplayName("Trying to delete user with invalid ID")
+    @DisplayName("Trying to delete phone with invalid ID")
     void deleteUserWithInvalidID() throws Exception {
-        mockMvc.perform(delete("/api/v1/phones/5"))
+        mockMvc.perform(delete("/api/v1/phones/0"))
                 .andExpect(status().isNotFound());
     }
 
@@ -103,7 +102,7 @@ class PhoneControllerTest {
     }
 
     @Test
-    @DisplayName("Put with incomplete data, should return null on missing content")
+    @DisplayName("Put with incomplete data, should return brand id 0 on missing content")
     void putUserWithIncompleteData() throws Exception {
         mockMvc.perform(put("/api/v1/phones/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +114,7 @@ class PhoneControllerTest {
     }
 
     @Test
-    @DisplayName("Patch user with new complete data")
+    @DisplayName("Patch phone with new complete data")
     void patchUserWithAllData() throws Exception {
         mockMvc.perform(patch("/api/v1/phones/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -126,7 +125,7 @@ class PhoneControllerTest {
     }
 
     @Test
-    @DisplayName("Patch with only username and expect other values to remain unchanged")
+    @DisplayName("Patch with only phone name and expect other values to remain unchanged")
     void patchUserWithNewUsername() throws Exception {
         mockMvc.perform(patch("/api/v1/phones/1")
                 .contentType(MediaType.APPLICATION_JSON)

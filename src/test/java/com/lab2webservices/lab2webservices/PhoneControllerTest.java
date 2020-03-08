@@ -129,7 +129,7 @@ class PhoneControllerTest {
 
     @Test
     @DisplayName("Patch with only phone name and expect other values to remain unchanged")
-    void patchPhoneWithNewUsername() throws Exception {
+    void patchPhoneWithNewPhoneName() throws Exception {
         mockMvc.perform(patch("/api/v1/phones/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"phoneName\":\"Iphone 6s\"}"))
